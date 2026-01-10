@@ -1,8 +1,7 @@
-import os
 import time
 from playwright.sync_api import sync_playwright
-from .database import SessionLocal
-from .models import Post
+from database import SessionLocal
+from models import Post
 from datetime import datetime
 
 class LinkedInScraper:

@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Next.js
+.next/
+node_modules/
+.DS_Store
+*.log
+
+# Database
+*.db
+*.sqlite3
+
+# Playwright
+test-results/

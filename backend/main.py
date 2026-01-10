@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from .database import engine, Base, get_db
-from .models import Post
+from database import engine, Base, get_db
+from models import Post
 import uvicorn
 import os
 from dotenv import load_dotenv
@@ -24,7 +24,7 @@ def get_posts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 @app.post("/scrape")
 def trigger_scrape(limit: int = 10, db: Session = Depends(get_db)):
-    from .scraper import LinkedInScraper
+    from scraper import LinkedInScraper
     try:
         scraper = LinkedInScraper()
         count = scraper.scrape_posts(limit=limit)
@@ -34,7 +34,7 @@ def trigger_scrape(limit: int = 10, db: Session = Depends(get_db)):
 
 @app.post("/analyze")
 def trigger_analysis(db: Session = Depends(get_db)):
-    from .agents import run_analysis
+    from agents import run_analysis
     # Fetch recent posts for analysis
     posts = db.query(Post).order_by(Post.scraped_at.desc()).limit(10).all()
     if not posts:

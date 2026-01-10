@@ -6,8 +6,9 @@ load_dotenv()
 
 config_list = [
     {
-        "model": "gpt-4-turbo", # Or whichever model user prefers/has access to via env
-        "api_key": os.getenv("OPENAI_API_KEY"),
+        "model": "gemini-1.5-flash",
+        "api_key": os.getenv("GOOGLE_API_KEY"),
+        "api_type": "google"
     }
 ]
 
