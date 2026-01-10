@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+playwright
+pyautogen
+sqlalchemy
+python-dotenv
+pydantic
