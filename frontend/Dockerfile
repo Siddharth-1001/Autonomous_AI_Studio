@@ -20,6 +20,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Fix permissions for next binary
+RUN chmod +x ./node_modules/.bin/*
+
 # Disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
