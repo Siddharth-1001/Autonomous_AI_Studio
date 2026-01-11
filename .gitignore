@@ -18,4 +18,4 @@ node_modules/
 # Playwright
 test-results/
 
-backend/vm
+backend/vmbackend/.env 
