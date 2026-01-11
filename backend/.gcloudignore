@@ -1,0 +1,12 @@
+# Ignore virtual environment
+vm/
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore local files
+.env
+.git/
+*.log

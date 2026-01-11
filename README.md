@@ -30,12 +30,25 @@ Stop staring at fragmented dashboards. Let AI scrape, analyze, and strategize fo
 ### Dashboard - Command Center
 ![Dashboard](frontend/src/snaps/Autonomous%20Dashboard.png)
 
-<!-- ### AI Analysis Modal -->
-<!-- ![Analysis](Add analysis modal screenshot path here) -->
+### AI Data Pipeline
+![Analysis](frontend/src/snaps/Data%20Pipeline.png)
 
 ### Multi-Agent Pipeline Visualization
 ![Pipeline](frontend/src/snaps/Landing%20Page%20-%20Data%20Pipeline%20Section.png)
 
+### Autonomous Features
+![Features](frontend/src/snaps/Autonomous%20Feature.png)
+
+### Autonomous Agents Output
+![Agents](frontend/src/snaps/Autonomous%20Output.png) 
+
+### Data Gathering
+![Data Gathering](frontend/src/snaps/Data%20Gathering.png)
+
+### Statistics
+![Statistics](frontend/src/snaps/Statistics.png)
+
+### 
 </div>
 
 ---
@@ -123,6 +136,8 @@ This platform operates on the principle of **"Set and Forget"** automation:
 ### Agentic Framework: AutoGen (AG2) + Gemini 2.5 Flash
 
 We leverage **Microsoft's AutoGen framework** with **Google's Gemini 2.5 Flash** to create a collaborative multi-agent system:
+
+![Multi-Agent Architecture](frontend/src/snaps/Multi%20Agent%20Architecture.png)
 
 ```
                     ┌─────────────────────────────────────┐
