@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import AgentOrchestrator from "@/components/AgentOrchestrator";
 import { RefreshCcw, LayoutDashboard, MessageSquare, ThumbsUp, Repeat, Sparkles, TrendingUp, Calendar, ArrowUpRight, Search, Filter, Zap, Shield, Globe, X, Maximize2, FileText } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from 'react-markdown';
@@ -320,6 +321,12 @@ export default function Dashboard() {
                 onConnect={handleConnectAndSync}
                 loading={loading}
             />
+
+            <AnimatePresence>
+                {(loading || analyzing) && (
+                    <AgentOrchestrator mode={loading ? 'scraping' : analyzing ? 'analysis' : null} />
+                )}
+            </AnimatePresence>
         </div>
     );
 }
