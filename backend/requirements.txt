@@ -1,7 +1,11 @@
 fastapi
 uvicorn
 playwright
-pyautogen
+ag2[gemini]
 sqlalchemy
 python-dotenv
 pydantic
+google-generativeai
+vertexai
+Pillow
+jsonschema
