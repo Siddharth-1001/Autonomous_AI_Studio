@@ -15,16 +15,15 @@ from models import Post
 
 
 class LinkedInScraper:
-    def __init__(self):
-        self.email = os.getenv("LINKEDIN_EMAIL")
-        self.password = os.getenv("LINKEDIN_PASSWORD")
-        self.profile_url = os.getenv(
-            "LINKEDIN_PROFILE_URL", "https://www.linkedin.com/in/siddharth-1001/"
-        )
-        if not self.email or not self.password:
-            raise ValueError(
-                "LINKEDIN_EMAIL and LINKEDIN_PASSWORD environment variables must be set"
-            )
+    def __init__(self, email: str, password: str, username: str):
+        self.email = email
+        self.password = password
+        # Construct profile URL from username if it's just a username, otherwise treat as full URL
+        if "linkedin.com" in username:
+            self.profile_url = username
+        else:
+            self.profile_url = f"https://www.linkedin.com/in/{username}/"
+            
         self.db = SessionLocal()
 
     def login(self, page):

@@ -43,16 +43,28 @@ def get_posts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return posts
 
 
+from pydantic import BaseModel
+
+class ScrapeRequest(BaseModel):
+    email: str
+    password: str
+    username: str
+    limit: int = 10
+
 @app.post("/scrape")
-def trigger_scrape(limit: int = 10, db: Session = Depends(get_db)):
+def trigger_scrape(request: ScrapeRequest, db: Session = Depends(get_db)):
     import traceback
 
     from scraper import LinkedInScraper
 
     try:
-        print(f"Starting scrape for {limit} posts...")
-        scraper = LinkedInScraper()
-        count = scraper.scrape_posts(limit=limit)
+        print(f"Starting scrape for {request.limit} posts...")
+        scraper = LinkedInScraper(
+            email=request.email, 
+            password=request.password, 
+            username=request.username
+        )
+        count = scraper.scrape_posts(limit=request.limit)
         print(f"Scrape finished. Count: {count}")
         return {"message": f"Successfully scraped {count} posts"}
     except Exception as e:

@@ -23,6 +23,7 @@ export default function Dashboard() {
     const [analyzing, setAnalyzing] = useState(false);
     const [analysis, setAnalysis] = useState<string | null>(null);
     const [isAnalysisModalOpen, setIsAnalysisModalOpen] = useState(false);
+    const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
 
     const fetchPosts = async () => {
         try {
@@ -38,17 +39,33 @@ export default function Dashboard() {
         fetchPosts();
     }, []);
 
-    const handleScrape = async () => {
+    const handleScrapeClick = () => {
+        setIsConnectModalOpen(true);
+    };
+
+    const handleConnectAndSync = async (creds: any) => {
         setLoading(true);
+        // Close modal immediately to show loading state on button or keep it open? 
+        // Let's keep it open or close it? The UI design has loading state in modal. 
+        // But the button in main UI also has loading state. 
+        // Let's close modal and let main UI show loading.
+        setIsConnectModalOpen(false);
+
         try {
             await fetch("http://localhost:8000/scrape", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ limit: 10 }),
+                body: JSON.stringify({
+                    limit: 10,
+                    email: creds.email,
+                    password: creds.password,
+                    username: creds.username
+                }),
             });
             await fetchPosts();
         } catch (e) {
             console.error("Scrape failed", e);
+            alert("Failed to scrape. Check console for details.");
         } finally {
             setLoading(false);
         }
@@ -99,7 +116,7 @@ export default function Dashboard() {
                         </div>
                         <div className="flex gap-3">
                             <button
-                                onClick={handleScrape}
+                                onClick={handleScrapeClick}
                                 disabled={loading}
                                 className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all ${loading
                                     ? 'bg-zinc-800 text-gray-500 cursor-not-allowed'
@@ -167,8 +184,8 @@ export default function Dashboard() {
                                         <div className="flex justify-between items-start mb-4">
                                             <div className="flex gap-2">
                                                 <span className={`px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider border rounded-md transition-colors ${post.post_type === 'article' ? 'bg-orange-500/10 border-orange-500/20 text-orange-400' :
-                                                        post.post_type === 'video' ? 'bg-red-500/10 border-red-500/20 text-red-400' :
-                                                            'bg-blue-500/10 border-blue-500/20 text-blue-400'
+                                                    post.post_type === 'video' ? 'bg-red-500/10 border-red-500/20 text-red-400' :
+                                                        'bg-blue-500/10 border-blue-500/20 text-blue-400'
                                                     }`}>
                                                     {post.post_type}
                                                 </span>
@@ -296,6 +313,101 @@ export default function Dashboard() {
                 onClose={() => setIsAnalysisModalOpen(false)}
                 content={analysis || ""}
             />
+
+            <ConnectLinkedInModal
+                isOpen={isConnectModalOpen}
+                onClose={() => setIsConnectModalOpen(false)}
+                onConnect={handleConnectAndSync}
+                loading={loading}
+            />
+        </div>
+    );
+}
+
+function ConnectLinkedInModal({ isOpen, onClose, onConnect, loading }: { isOpen: boolean, onClose: () => void, onConnect: (creds: any) => void, loading: boolean }) {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
+
+    if (!isOpen) return null;
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        onConnect({ email, password, username });
+    };
+
+    return (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={onClose}
+                className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            />
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                className="relative w-full max-w-md bg-[#0A0A0A] border border-white/10 rounded-2xl shadow-2xl overflow-hidden"
+            >
+                <div className="p-6 border-b border-white/10 bg-zinc-900/50 flex justify-between items-center">
+                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                        <RefreshCcw className="w-5 h-5 text-blue-500" /> Connect LinkedIn
+                    </h2>
+                    <button onClick={onClose} className="text-gray-400 hover:text-white"><X className="w-5 h-5" /></button>
+                </div>
+
+                <form onSubmit={handleSubmit} className="p-6 space-y-4">
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-400">Email / Login ID</label>
+                        <input
+                            type="email"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full bg-zinc-900 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition"
+                            placeholder="you@example.com"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-400">Password</label>
+                        <input
+                            type="password"
+                            required
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full bg-zinc-900 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition"
+                            placeholder="••••••••"
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-400">Username / Profile URL</label>
+                        <input
+                            type="text"
+                            required
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className="w-full bg-zinc-900 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition"
+                            placeholder="johndoe or linkedin.com/in/johndoe"
+                        />
+                        <p className="text-xs text-gray-500">We use this to verify login and navigate to your profile.</p>
+                    </div>
+
+                    <div className="pt-4 flex justify-end gap-3">
+                        <button type="button" onClick={onClose} className="px-4 py-2 text-gray-400 hover:text-white transition">Cancel</button>
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="px-6 py-2 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition flex items-center gap-2 disabled:opacity-50"
+                        >
+                            {loading ? <RefreshCcw className="w-4 h-4 animate-spin" /> : null}
+                            {loading ? "Syncing..." : "Start Sync"}
+                        </button>
+                    </div>
+                </form>
+            </motion.div>
         </div>
     );
 }
