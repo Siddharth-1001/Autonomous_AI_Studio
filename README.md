@@ -27,6 +27,9 @@ Stop staring at fragmented dashboards. Let AI scrape, analyze, and strategize fo
 ### Landing Page
 ![Landing Page](frontend/src/snaps/Landing%20Page%20-%20Hero%20Section.png)
 
+### Social Media Support
+![Social Media](frontend/src/snaps/Social.png)
+
 ### Dashboard - Command Center
 ![Dashboard](frontend/src/snaps/Autonomous%20Dashboard.png)
 
